@@ -16,12 +16,12 @@ path_file_running = create_tmp_file_path()
 
 
 class ProjectPaths(BaseSettings):
-    _PATH_FOLDER_ROOT: Path = Path(__file__).parents[1].resolve()
-    _PATH_FOLDER_NLP: Path = _PATH_FOLDER_ROOT
-    _PATH_FOLDER_MODEL: Path = _PATH_FOLDER_ROOT / "models"
-    _PATH_FOLDER_DATA: Path = _PATH_FOLDER_ROOT / "data"
+    _path_folder_root: Path = Path(__file__).parents[1].resolve()
+    _path_folder_nlp: Path = _path_folder_root
+    _path_folder_model: Path = _path_folder_root / "models"
+    _path_folder_data: Path = _path_folder_root / "data"
     # TODO move somewhere else since it is no path...
-    _PYTHON_EXECUTABLE: str = "python"
+    _python_executable: str = "python"
 
     _string_project_name: str
     _path_project_data_folder: Path
@@ -49,8 +49,8 @@ class ProjectPaths(BaseSettings):
         if not isinstance(string_project_name, str):
             raise TypeError
         self._string_project_name: str = string_project_name
-        self._path_project_data_folder: Path = self._PATH_FOLDER_DATA / Path(string_project_name)
-        self._path_project_model_folder: Path = self._PATH_FOLDER_MODEL / Path(string_project_name)
+        self._path_project_data_folder: Path = self._path_folder_data / Path(string_project_name)
+        self._path_project_model_folder: Path = self._path_folder_model / Path(string_project_name)
         self._main_settings: MainSettings = main_settings
         self._update_all_paths_depending_on_path_project_data_folder()
         self._update_all_paths_depending_on_path_project_model_folder()
@@ -86,24 +86,24 @@ class ProjectPaths(BaseSettings):
         self._update_all_paths_depending_on_path_project_model_folder()
 
     @property
-    def PATH_FOLDER_ROOT(self) -> Path:
-        return self._PATH_FOLDER_ROOT
+    def path_folder_root(self) -> Path:
+        return self._path_folder_root
 
     @property
-    def PATH_FOLDER_NLP(self) -> Path:
-        return self._PATH_FOLDER_NLP
+    def path_folder_nlp(self) -> Path:
+        return self._path_folder_nlp
 
     @property
-    def PATH_FOLDER_MODEL(self) -> Path:
-        return self._PATH_FOLDER_MODEL
+    def path_folder_model(self) -> Path:
+        return self._path_folder_model
 
     @property
-    def PATH_FOLDER_DATA(self) -> Path:
-        return self._PATH_FOLDER_DATA
+    def path_folder_data(self) -> Path:
+        return self._path_folder_data
 
     @property
-    def PYTHON_EXECUTABLE(self) -> str:
-        return self._PYTHON_EXECUTABLE
+    def python_executable(self) -> str:
+        return self._python_executable
 
     def _update_all_paths_depending_on_path_project_data_folder(self) -> None:
         list_paths_model_fields_filtered: list[str] = [
@@ -113,7 +113,7 @@ class ProjectPaths(BaseSettings):
         for path_field in list_paths_model_fields_filtered:
             path_field_default: Path = self.model_fields[path_field].default
             setattr(
-                self, f"{path_field}", self._PATH_FOLDER_DATA / Path(self._string_project_name) / path_field_default
+                self, f"{path_field}", self._path_folder_data / Path(self._string_project_name) / path_field_default
             )
 
     def _update_all_paths_depending_on_path_project_model_folder(self) -> None:
@@ -132,7 +132,7 @@ class ProjectPaths(BaseSettings):
             setattr(
                 self,
                 string_model_field,
-                self._PATH_FOLDER_MODEL
+                self._path_folder_model
                 / Path(self._string_project_name)
                 / self.model_fields[string_model_field].default
                 / path_main_settings,
